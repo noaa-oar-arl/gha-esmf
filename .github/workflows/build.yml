@@ -75,13 +75,13 @@ jobs:
           name:
 
       - name: List downloaded ESMFs
-        run: ls -l esmf-*.tar.gz
+        run: ls -l esmf-*/esmf-*.tar.gz
 
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: esmf-*.tar.gz
+          file: esmf-*/esmf-*.tar.gz
           tag: ${{ github.ref }}
           overwrite: true
           file_glob: true
