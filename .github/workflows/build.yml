@@ -50,11 +50,14 @@ jobs:
           echo "ESMFMKFILE=${ESMF_DIR}/lib/libO/Linux.gfortran.64.mpiuni.default/esmf.mk" >> "$GITHUB_ENV"
           echo "ESMF_DIR=${ESMF_DIR}" >> "$GITHUB_ENV"
 
-      - name: Show ESMF dir size
-        run: du -sh ${{ env.ESMF_DIR }}
+      - name: Compress ESMF dir
+        run: |
+          du -sh ${{ env.ESMF_DIR }}
+          tar czvf ${{ env.ESMF_DIR }}.tar.gz ${{ env.ESMF_DIR }}
+          du -sh ${{ env.ESMF_DIR }}.tar.gz
 
       - name: Upload ESMF dir as artifact
         uses: actions/upload-artifact@v2
         with:
           name: esmf-${{ matrix.esmf_version }}-gcc-${{ matrix.gcc_major_version }}-mpiuni
-          path: ${{ env.ESMF_DIR }}/
+          path: ${{ env.ESMF_DIR }}.tar.gz
