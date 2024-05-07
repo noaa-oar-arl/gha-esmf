@@ -74,6 +74,9 @@ jobs:
         with:
           name:
 
+      - name: List downloaded ESMFs
+        run: ls -l esmf-*.tar.gz
+
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
