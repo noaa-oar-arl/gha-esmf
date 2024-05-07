@@ -74,18 +74,14 @@ jobs:
         with:
           name:
 
-      - name: Extract downloaded ESMF tar.gz's
-        run: |
-          ls -Al esmf-*
-          for d in esmf-*; do
-            unzip ${d}/${d}.zip
-          done
+      - name: List downloaded artifacts
+        run: ls -Al esmf-*
 
       - name: Upload ESMFs to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ./*.tar.gz
+          file: ./esmf-*/*.tar.gz
           tag: ${{ github.ref }}
           overwrite: true
           file_glob: true
