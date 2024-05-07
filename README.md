@@ -1,1 +1,51 @@
 # gha-esmf
+
+This repository builds ESMF using GitHub Actions Linux runners (`ubuntu-22.04`)
+and publishes the resulting `ESMF_DIR`s.
+Standard runner compilers and APT packages for ESMF's dependencies are used.
+This allows a project that depends on ESMF to be quickly built in a GitHub Actions workflow.
+
+## Usage
+
+No-MPI (`mpiuni`) example:
+
+```yaml
+jobs:
+  builds:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt-get install -y libnetcdf-dev libnetcdff-dev
+          liblapack-dev libopenblas-dev
+
+      - name: Fetch pre-built ESMF
+        run: |
+          esmf=8.4.2-gcc-12-mpiuni
+
+          ESMF_DIR=$HOME/esmf/$esmf
+          mkdir -p $ESMF_DIR
+          cd $ESMF_DIR
+          wget https://github.com/zmoon/gha-esmf/releases/download/v0.0.5/${esmf}.tar.gz
+          tar xzvf ${esmf}.tar.gz
+
+          echo "ESMFMKFILE=${ESMF_DIR}/lib/libO/Linux.gfortran.64.mpiuni.default/esmf.mk" >> "$GITHUB_ENV"
+
+      - name: Configure
+        run: FC=gfortran-12 cmake -S . -B build
+
+      - name: Build
+        run: cmake --build build
+```
+
+> [!NOTE]
+>
+> ESMF with MPI will have
+>
+> ```
+> ESMFMKFILE=${ESMF_DIR}/lib/libO/Linux.gfortran.64.mpi.default/esmf.mk
+> ```
+>
+> instead (slightly different path).
