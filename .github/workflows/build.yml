@@ -53,7 +53,7 @@ jobs:
       - name: Compress ESMF dir
         run: |
           du -sh ${{ env.ESMF_DIR }}
-          tar czvf ${{ env.ESMF_DIR }}.tar.gz ${{ env.ESMF_DIR }}
+          tar czvf ${{ env.ESMF_DIR }}.tar.gz --directory=${{ env.ESMF_DIR }} .
           du -sh ${{ env.ESMF_DIR }}.tar.gz
 
       - name: Upload ESMF dir as artifact
