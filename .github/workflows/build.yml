@@ -61,6 +61,7 @@ jobs:
         with:
           name: esmf-${{ matrix.esmf_version }}-gcc-${{ matrix.gcc_major_version }}-mpiuni
           path: ${{ env.ESMF_DIR }}.tar.gz
+          retention-days: 1
 
   release:
     name: Release
