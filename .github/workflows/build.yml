@@ -26,7 +26,7 @@ jobs:
           gcc="${{ matrix.gcc_major_version }}"
           esmf_base=$HOME/esmf
 
-          export ESMF_DIR=${esmf_base}/${v}-gcc-${gcc}
+          export ESMF_DIR=${esmf_base}/${v}-gcc-${gcc}-mpiuni
           mkdir -p $ESMF_DIR
           cd $esmf_base
           wget https://github.com/esmf-org/esmf/archive/refs/tags/v${v}.tar.gz
