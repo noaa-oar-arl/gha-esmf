@@ -75,7 +75,7 @@ jobs:
           name:
 
       - name: Extract downloaded ESMF tar.gz's
-        run:
+        run: |
           ls -Al esmf-*
           for d in esmf-*; do
             unzip ${d}/${d}.zip
