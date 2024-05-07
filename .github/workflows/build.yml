@@ -57,7 +57,28 @@ jobs:
           du -sh ${{ env.ESMF_DIR }}.tar.gz
 
       - name: Upload ESMF dir as artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: esmf-${{ matrix.esmf_version }}-gcc-${{ matrix.gcc_major_version }}-mpiuni
           path: ${{ env.ESMF_DIR }}.tar.gz
+
+  release:
+    name: Release
+    runs-on: ubuntu-22.04
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    steps:
+      - name: Download ESMF dir artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name:
+
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: esmf-*.tar.gz
+          tag: ${{ github.ref }}
+          overwrite: true
+          file_glob: true
