@@ -9,8 +9,8 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        gcc_major_version: ["12"]
-        esmf_version: ["8.3.1", "8.4.2"]
+        gcc_major_version: ["12", "13"]
+        esmf_version: ["8.3.1", "8.4.2", "8.5.0", "8.6.0"]
 
     steps:
       - name: Check out
