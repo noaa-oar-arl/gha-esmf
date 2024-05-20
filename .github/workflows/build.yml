@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         gcc_major_version: ["12", "13"]
-        esmf_version: ["8.3.1", "8.4.2", "8.5.0", "8.6.0"]
+        esmf_version: ["8.3.1", "8.4.2", "8.5.0", "8.6.1"]
 
     steps:
       - name: Check out
