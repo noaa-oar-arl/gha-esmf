@@ -5,12 +5,15 @@ on:
 
 jobs:
   build:
-    name: Build ESMF ${{ matrix.esmf_version }} with GCC ${{ matrix.gcc_major_version }} (mpiuni)
+    name: Build ESMF ${{ matrix.esmf_version }}
+      with GCC ${{ matrix.gcc_major_version }}
+      (${{  matrix.comm }})
     runs-on: ubuntu-22.04
     strategy:
       matrix:
         gcc_major_version: ["12"]
         esmf_version: ["8.3.1", "8.4.2", "8.5.0", "8.6.1"]
+        comm: ["mpiuni", "mpi"]
 
     steps:
       - name: Check out
@@ -18,7 +21,7 @@ jobs:
 
       - name: Install dependencies
         run: sudo apt-get install -y libnetcdf-dev libnetcdff-dev
-          liblapack-dev libopenblas-dev
+          liblapack-dev libopenblas-dev libopenmpi-dev openmpi-bin
 
       - name: Build ESMF
         run: |
@@ -26,7 +29,7 @@ jobs:
           gcc="${{ matrix.gcc_major_version }}"
           esmf_base=$HOME/esmf
 
-          export ESMF_DIR=${esmf_base}/${v}-gcc-${gcc}-mpiuni
+          export ESMF_DIR=${esmf_base}/${v}-gcc-${gcc}-${{ matrix.comm }}
           mkdir -p $ESMF_DIR
           cd $esmf_base
           wget https://github.com/esmf-org/esmf/archive/refs/tags/v${v}.tar.gz
@@ -34,12 +37,21 @@ jobs:
 
           export ESMF_COMPILER=gfortran
           export ESMF_LAPACK=netlib
-          export ESMF_COMM=mpiuni
+          export ESMF_COMM=${{ matrix.comm }}
+          export ESMF_PIO=internal
           export ESMF_NETCDF=nc-config
-
-          export ESMF_F90COMPILER=gfortran-${gcc}
-          export ESMF_CCOMPILER=gcc-${gcc}
-          export ESMF_CXXCOMPILER=g++-${gcc}
+          if [ "${{ matrix.comm }}" == "mpiuni" ]; then
+            export ESMF_F90COMPILER=gfortran-${gcc}
+            export ESMF_CCOMPILER=gcc-${gcc}
+            export ESMF_CXXCOMPILER=g++-${gcc}
+          else if [ "${{ matrix.comm }}" == "mpi" ]; then
+            export OMPI_FC=gfortran-${gcc}
+            export OMPI_CC=gcc-${gcc}
+            export OMPI_CXX=g++-${gcc}
+            export ESMF_F90COMPILER=mpifort
+            export ESMF_CCOMPILER=mpicc
+            export ESMF_CXXCOMPILER=mpic++
+          fi
           export ESMF_F90LINKER=/usr/bin/ld
           export ESMF_CLINKER=/usr/bin/ld
           export ESMF_CXXLINKER=/usr/bin/ld
@@ -47,7 +59,7 @@ jobs:
           cd $ESMF_DIR
           make -j lib
 
-          echo "ESMFMKFILE=${ESMF_DIR}/lib/libO/Linux.gfortran.64.mpiuni.default/esmf.mk" >> "$GITHUB_ENV"
+          echo "ESMFMKFILE=${ESMF_DIR}/lib/libO/Linux.gfortran.64.${{ matrix.comm }}.default/esmf.mk" >> "$GITHUB_ENV"
           echo "ESMF_DIR=${ESMF_DIR}" >> "$GITHUB_ENV"
 
       - name: Compress ESMF dir
@@ -59,7 +71,7 @@ jobs:
       - name: Upload ESMF dir as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: esmf-${{ matrix.esmf_version }}-gcc-${{ matrix.gcc_major_version }}-mpiuni
+          name: esmf-${{ matrix.esmf_version }}-gcc-${{ matrix.gcc_major_version }}-${{ matrix.comm }}
           path: ${{ env.ESMF_DIR }}.tar.gz
           retention-days: 1
 
