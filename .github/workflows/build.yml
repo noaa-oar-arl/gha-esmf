@@ -39,13 +39,13 @@ jobs:
           export ESMF_COMPILER=gfortran
           export ESMF_LAPACK=netlib
           export ESMF_COMM=${comm}
-          export ESMF_PIO=internal
           export ESMF_NETCDF=nc-config
           if [ "${comm}" == "mpiuni" ]; then
             export ESMF_F90COMPILER=gfortran-${gcc}
             export ESMF_CCOMPILER=gcc-${gcc}
             export ESMF_CXXCOMPILER=g++-${gcc}
           elif [ "${comm}" == "mpi" ]; then
+            export ESMF_PIO=internal
             export OMPI_FC=gfortran-${gcc}
             export OMPI_CC=gcc-${gcc}
             export OMPI_CXX=g++-${gcc}
