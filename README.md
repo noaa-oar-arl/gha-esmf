@@ -28,7 +28,7 @@ jobs:
           ESMF_DIR=$HOME/esmf/$esmf
           mkdir -p $ESMF_DIR
           cd $ESMF_DIR
-          wget https://github.com/zmoon/gha-esmf/releases/download/v0.0.5/${esmf}.tar.gz
+          wget https://github.com/zmoon/gha-esmf/releases/download/v0.0.8/${esmf}.tar.gz
           tar xzvf ${esmf}.tar.gz
 
           echo "ESMFMKFILE=${ESMF_DIR}/lib/libO/Linux.gfortran.64.mpiuni.default/esmf.mk" >> "$GITHUB_ENV"
@@ -40,12 +40,40 @@ jobs:
         run: cmake --build build
 ```
 
+MPI (Open MPI) example:
+
+```yaml
+jobs:
+  builds:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt-get install -y libnetcdf-dev libnetcdff-dev
+          liblapack-dev libopenblas-dev libopenmpi-dev openmpi-bin
+
+      - name: Fetch pre-built ESMF
+        run: |
+          esmf=8.4.2-gcc-12-mpi
+
+          ESMF_DIR=$HOME/esmf/$esmf
+          mkdir -p $ESMF_DIR
+          cd $ESMF_DIR
+          wget https://github.com/zmoon/gha-esmf/releases/download/v0.0.8/${esmf}.tar.gz
+          tar xzvf ${esmf}.tar.gz
+
+          echo "ESMFMKFILE=${ESMF_DIR}/lib/libO/Linux.gfortran.64.mpi.default/esmf.mk" >> "$GITHUB_ENV"
+
+      - name: Configure
+        run: FC=gfortran-12 cmake -S . -B build
+
+      - name: Build
+        run: cmake --build build
+```
+
 > [!NOTE]
 >
-> ESMF with MPI will have
->
-> ```
-> ESMFMKFILE=${ESMF_DIR}/lib/libO/Linux.gfortran.64.mpi.default/esmf.mk
-> ```
->
-> instead (slightly different path).
+> Note the slight difference in `esmf.mk` path between MPI and no-MPI
+> (`.mpiuni.default` vs. `.mpi.default`).
