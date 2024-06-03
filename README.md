@@ -11,7 +11,7 @@ No-MPI (`mpiuni`) example:
 
 ```yaml
 jobs:
-  builds:
+  build:
     runs-on: ubuntu-22.04
     steps:
       - name: Check out
@@ -44,7 +44,7 @@ MPI (Open MPI) example:
 
 ```yaml
 jobs:
-  builds:
+  build:
     runs-on: ubuntu-22.04
     steps:
       - name: Check out
