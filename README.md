@@ -28,7 +28,7 @@ jobs:
           ESMF_DIR=$HOME/esmf/$esmf
           mkdir -p $ESMF_DIR
           cd $ESMF_DIR
-          wget https://github.com/zmoon/gha-esmf/releases/download/v0.0.8/${esmf}.tar.gz
+          wget https://github.com/noaa-oar-arl/gha-esmf/releases/download/v0.0.8/${esmf}.tar.gz
           tar xzvf ${esmf}.tar.gz
 
           echo "ESMFMKFILE=${ESMF_DIR}/lib/libO/Linux.gfortran.64.mpiuni.default/esmf.mk" >> "$GITHUB_ENV"
@@ -61,7 +61,7 @@ jobs:
           ESMF_DIR=$HOME/esmf/$esmf
           mkdir -p $ESMF_DIR
           cd $ESMF_DIR
-          wget https://github.com/zmoon/gha-esmf/releases/download/v0.0.8/${esmf}.tar.gz
+          wget https://github.com/noaa-oar-arl/gha-esmf/releases/download/v0.0.8/${esmf}.tar.gz
           tar xzvf ${esmf}.tar.gz
 
           echo "ESMFMKFILE=${ESMF_DIR}/lib/libO/Linux.gfortran.64.mpi.default/esmf.mk" >> "$GITHUB_ENV"
