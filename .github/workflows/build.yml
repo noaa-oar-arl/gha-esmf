@@ -1,5 +1,8 @@
+name: Build
+
 on:
   push:
+    branches: [main]
   pull_request:
   workflow_dispatch:
 
@@ -8,20 +11,24 @@ jobs:
     name: Build ESMF ${{ matrix.esmf_version }}
       with GCC ${{ matrix.gcc_major_version }}
       (${{ matrix.esmf_comm }})
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
-        gcc_major_version: ["12"]
-        esmf_version: ["8.3.1", "8.4.2", "8.5.0", "8.6.1"]
+        gcc_major_version: ["13"]
+        esmf_version: ["8.4.2", "8.5.0", "8.6.1", "8.7.0"]
         esmf_comm: ["mpiuni", "mpi"]
 
     steps:
       - name: Check out
         uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: sudo apt-get install -y libnetcdf-dev libnetcdff-dev
-          liblapack-dev libopenblas-dev libopenmpi-dev openmpi-bin
+      - name: Install non-MPI dependencies
+        run: sudo apt-get update && sudo apt-get install -y
+          libnetcdf-dev libnetcdff-dev liblapack-dev libopenblas-dev
+
+      - if: matrix.esmf_comm == 'mpi'
+        name: Install OpenMPI
+        run: sudo apt-get install -y libopenmpi-dev openmpi-bin
 
       - name: Build ESMF
         run: |
@@ -78,7 +85,7 @@ jobs:
 
   release:
     name: Release
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: build
     if: startsWith(github.ref, 'refs/tags/v')
 
