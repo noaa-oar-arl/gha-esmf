@@ -18,8 +18,8 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: sudo apt-get install -y libnetcdf-dev libnetcdff-dev
-          liblapack-dev libopenblas-dev
+        run: sudo apt-get update && sudo apt-get install -y
+          libnetcdf-dev libnetcdff-dev liblapack-dev libopenblas-dev
 
       - name: Fetch pre-built ESMF
         run: |
@@ -51,8 +51,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: sudo apt-get install -y libnetcdf-dev libnetcdff-dev
-          liblapack-dev libopenblas-dev libopenmpi-dev openmpi-bin
+        run: sudo apt-get update && sudo apt-get install -y
+          libnetcdf-dev libnetcdff-dev liblapack-dev libopenblas-dev
+          libopenmpi-dev openmpi-bin
 
       - name: Fetch pre-built ESMF
         run: |
