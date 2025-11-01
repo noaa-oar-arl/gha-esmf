@@ -78,7 +78,7 @@ jobs:
           du -sh ${{ env.ESMF_DIR }}.tar.gz
 
       - name: Upload ESMF dir as artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: esmf-${{ matrix.esmf_version }}-gcc-${{ matrix.gcc_major_version }}-${{ matrix.esmf_comm }}
           path: ${{ env.ESMF_DIR }}.tar.gz
