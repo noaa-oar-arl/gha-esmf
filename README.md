@@ -23,12 +23,12 @@ jobs:
 
       - name: Fetch pre-built ESMF
         run: |
-          esmf=8.4.2-gcc-13-mpiuni
+          esmf=8.6.1-gcc-13-mpiuni
 
           ESMF_DIR=$HOME/esmf/$esmf
           mkdir -p $ESMF_DIR
           cd $ESMF_DIR
-          wget https://github.com/noaa-oar-arl/gha-esmf/releases/download/v0.0.9/${esmf}.tar.gz
+          wget https://github.com/noaa-oar-arl/gha-esmf/releases/download/v0.0.10/${esmf}.tar.gz
           tar xzvf ${esmf}.tar.gz
 
           echo "ESMFMKFILE=${ESMF_DIR}/lib/libO/Linux.gfortran.64.mpiuni.default/esmf.mk" >> "$GITHUB_ENV"
@@ -57,12 +57,12 @@ jobs:
 
       - name: Fetch pre-built ESMF
         run: |
-          esmf=8.4.2-gcc-13-mpi
+          esmf=8.6.1-gcc-13-mpi
 
           ESMF_DIR=$HOME/esmf/$esmf
           mkdir -p $ESMF_DIR
           cd $ESMF_DIR
-          wget https://github.com/noaa-oar-arl/gha-esmf/releases/download/v0.0.9/${esmf}.tar.gz
+          wget https://github.com/noaa-oar-arl/gha-esmf/releases/download/v0.0.10/${esmf}.tar.gz
           tar xzvf ${esmf}.tar.gz
 
           echo "ESMFMKFILE=${ESMF_DIR}/lib/libO/Linux.gfortran.64.mpi.default/esmf.mk" >> "$GITHUB_ENV"
